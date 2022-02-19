@@ -1,0 +1,37 @@
+{
+  "name": "rf-design",
+  "version": "0.0.1",
+  "description": "A basic ui component library based on Web Components",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -cw"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rawlinsfeng/rf-design.git"
+  },
+  "author": "rawlinsfeng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rawlinsfeng/rf-design/issues"
+  },
+  "homepage": "https://github.com/rawlinsfeng/rf-design#readme",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "Web Components",
+    "component",
+    "library",
+    "ui",
+    "basic"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "fs-extra": "^10.0.0",
+    "rollup": "^2.67.3",
+    "rollup-plugin-inline-code": "^1.2.7"
+  }
+}
