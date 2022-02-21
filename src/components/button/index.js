@@ -1,28 +1,26 @@
-import '../loading/index.js';
-import '../icon/index.js';
 import buttonStyle from 'inline!./src/components/button/index.css';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(buttonStyle).then(console.log);
+sheetObj.replace(buttonStyle).then();
 
 export default class Button extends HTMLElement {
-  // https://mladenplavsic.github.io/css-ripple-effect
   static get observedAttributes() { return ['disabled','icon','loading','href','htmltype'] }
 
   constructor() {
     super();
+  }
+
+  connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.adoptedStyleSheets = [sheetObj];
     shadowRoot.innerHTML = `
       <${this.href?'a':'button'} ${this.htmltype?'type="'+this.htmltype+'"':''} ${(this.download&&this.href)?'download="'+this.download+'"':''} ${this.href?'href="'+this.href+'" target="'+this.target+'" rel="'+this.rel+'"':''} class="btn" id="btn"></${this.href?'a':'button'}>${!this.loading && this.icon && this.icon!='null'?'<rf-icon id="icon" name='+this.icon+'></rf-icon>':''}<slot></slot>
-    `
-  }
-
-  connectedCallback() {
+    `;
     this.btn = this.shadowRoot.getElementById('btn');
     this.ico = this.shadowRoot.getElementById('icon');
     this.load = document.createElement('rf-loading');
     this.load.style.color = 'inherit';
+
     this.btn.addEventListener('mousedown', (ev) => {
       //ev.preventDefault();
       //ev.stopPropagation();

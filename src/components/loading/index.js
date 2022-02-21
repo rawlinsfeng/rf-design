@@ -1,7 +1,7 @@
 import loadingStyle from 'inline!./src/components/loading/index.css';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(loadingStyle).then(console.log);
+sheetObj.replace(loadingStyle).then();
 
 export default class Loading extends HTMLElement {
 

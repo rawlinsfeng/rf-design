@@ -1,0 +1,13 @@
+:host {
+  display:contents;
+}
+label{
+  color:var(--fontColor,#333);
+}
+label.required:not(:empty)::before{
+  content:'*';
+  color:var(--errorColor,#f4615c);
+}
+.item{
+  justify-self: stretch;
+}

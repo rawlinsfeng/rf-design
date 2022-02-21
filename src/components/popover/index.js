@@ -1,8 +1,8 @@
-import '../button/index.js';
+import Popcon from '../popcon/index.js';
 import popoverStyle from 'inline!./src/components/popover/index.css';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(popoverStyle).then(console.log);
+sheetObj.replace(popoverStyle).then();
 
 export default class Popover extends HTMLElement {
   static get observedAttributes() { return ['title', 'oktext', 'canceltext', 'loading', 'type'] }
@@ -66,7 +66,7 @@ export default class Popover extends HTMLElement {
     this.popcon = this.querySelector('rf-popcon');
     if (!this.disabled) {
       if (!this.popcon) {
-        this.popcon = new XyPopcon(this.type);
+        this.popcon = new Popcon(this.type);
         this.popcon.type = this.type;
         this.appendChild(this.popcon);
         this.popcon.title = this.title || 'popover';
@@ -74,8 +74,12 @@ export default class Popover extends HTMLElement {
         if (this.type == 'confirm') {
           this.popcon.oktext = this.oktext || '确 定';
           this.popcon.canceltext = this.canceltext || '取 消';
-          this.popcon.onsubmit = () => this.dispatchEvent(new CustomEvent('submit'));
-          this.popcon.oncancel = () => this.dispatchEvent(new CustomEvent('cancel'));
+          this.popcon.onsubmit = () => {
+            this.dispatchEvent(new CustomEvent('submit'));
+          }
+          this.popcon.oncancel = () => {
+            this.dispatchEvent(new CustomEvent('cancel'));
+          }
         }
       }
       //this.popcon.remove = true;
@@ -88,7 +92,7 @@ export default class Popover extends HTMLElement {
       } else {
         const path = ev.path || (ev.composedPath && ev.composedPath());
         if (!path.includes(this.popcon)) {
-          window.xyActiveElement = document.activeElement;
+          window.rfActiveElement = document.activeElement;
           if (this.accomplish) {
             this.popcon.open = true;
           } else {

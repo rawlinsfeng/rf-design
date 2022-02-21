@@ -1,34 +1,35 @@
 import popconStyle from 'inline!./src/components/popcon/index.css';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(popconStyle).then(console.log);
+sheetObj.replace(popconStyle).then();
 
 export default class Popcon extends HTMLElement {
   static get observedAttributes() { return ['open','title','oktext','canceltext','loading','type'] }
 
   constructor(type) {
     super();
+    this.type = type;
+  }
+
+  connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.adoptedStyleSheets = [sheetObj];
     shadowRoot.innerHTML = `
       ${
-        (type||this.type)==='confirm'?'<rf-icon id="popcon-type" class="popcon-type" name="question-circle" color="var(--waringColor,#faad14)"></rf-icon>':''
+        this.type==='confirm'?'<rf-icon id="popcon-type" class="popcon-type" name="question-circle" color="var(--waringColor,#faad14)"></rf-icon>':''
       }
       <div class="popcon-content">
         ${
-          (type||this.type)!==null?'<div class="popcon-title" id="title">'+this.title+'</div><rf-button class="btn-close" id="btn-close" icon="close"></rf-button>':''
+          this.type!==null?'<div class="popcon-title" id="title">'+this.title+'</div><rf-button class="btn-close" id="btn-close" icon="close"></rf-button>':''
         }
         <div class="popcon-body">
           <slot></slot>
         </div>
         ${
-          (type||this.type)==='confirm'?'<div class="popcon-footer"><rf-button id="btn-cancel">'+this.canceltext+'</rf-button><rf-button id="btn-submit" type="primary">'+this.oktext+'</rf-button></div>':''
+          this.type==='confirm'?'<div class="popcon-footer"><rf-button id="btn-cancel">'+this.canceltext+'</rf-button><rf-button id="btn-submit" type="primary">'+this.oktext+'</rf-button></div>':''
         }
       </div>
     `;
-  }
-
-  connectedCallback() {
     this.remove = false;
     if (this.type) {
       this.titles = this.shadowRoot.getElementById('title');
@@ -61,26 +62,26 @@ export default class Popcon extends HTMLElement {
     this.addEventListener('click', (ev) => {
       if (ev.target.closest('[autoclose]')) {
         this.open = false;
-        window.xyActiveElement.focus();
+        window.rfActiveElement.focus();
       }
     })
     if (this.type) {
       this.btnClose.addEventListener('click', () => {
         this.open = false;
-        window.xyActiveElement.focus();
+        window.rfActiveElement.focus();
       })
     }
     if (this.type=='confirm') {
-      this.btnCancel.addEventListener('click', async () => {
+      this.btnCancel.addEventListener('click', () => {
         this.dispatchEvent(new CustomEvent('cancel'));
         this.open = false;
-        window.xyActiveElement.focus();
+        window.rfActiveElement.focus();
       })
-      this.btnSubmit.addEventListener('click',() => {
+      this.btnSubmit.addEventListener('click', () => {
         this.dispatchEvent(new CustomEvent('submit'));
         if (!this.loading) {
           this.open = false;
-          window.xyActiveElement.focus();
+          window.rfActiveElement.focus();
         }
       })
     }
@@ -89,7 +90,7 @@ export default class Popcon extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name == 'open' && this.shadowRoot) {
       if (newValue==null && !this.stopfocus) {
-        //window.xyActiveElement.focus();
+        // window.rfActiveElement.focus();
       }
     }
     if (name == 'loading' && this.shadowRoot) {
@@ -105,12 +106,12 @@ export default class Popcon extends HTMLElement {
       }
     }
     if (name == 'oktext' && this.btnSubmit) {
-      if(newValue !== null){
+      if (newValue !== null) {
         this.btnSubmit.innerHTML = newValue;
       }
     }
     if (name == 'canceltext' && this.btnCancel) {
-      if(newValue !== null){
+      if (newValue !== null) {
         this.btnCancel.innerHTML = newValue;
       }
     }
@@ -135,7 +136,7 @@ export default class Popcon extends HTMLElement {
   }
 
   get title() {
-    return this.getAttribute('title') || 'popcon';
+    return this.getAttribute('title') || '';
   }
   set title(value) {
     this.setAttribute('title', value);

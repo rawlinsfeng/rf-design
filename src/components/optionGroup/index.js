@@ -1,7 +1,7 @@
 import optionGroupStyle from 'inline!./src/components/optionGroup/index.css';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(optionGroupStyle).then(console.log);
+sheetObj.replace(optionGroupStyle).then();
 
 export default class OptionGroup extends HTMLElement {
 

@@ -1,22 +1,21 @@
-import '../button/index.js';
 import optionStyle from 'inline!./src/components/option/index.css';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(optionStyle).then(console.log);
+sheetObj.replace(optionStyle).then();
 
 export default class Option extends HTMLElement {
   static get observedAttributes() { return ["value", "selected", "disabled"]; }
 
   constructor() {
     super();
+  }
+
+  connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.adoptedStyleSheets = [sheetObj];
     shadowRoot.innerHTML = `
       <rf-button id="option" class="option" type="flat" ${this.disabled ? "disabled" : ""}><slot></slot></rf-button>
     `;
-  }
-
-  connectedCallback() {
     this.option = this.shadowRoot.getElementById('option');
   }
 

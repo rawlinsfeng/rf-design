@@ -1,7 +1,7 @@
 import buttonGroupStyle from 'inline!./src/components/buttonGroup/index.css';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(buttonGroupStyle).then(console.log);
+sheetObj.replace(buttonGroupStyle).then();
 
 export default class ButtonGroup extends HTMLElement {
   static get observedAttributes() { return ['disabled'] }

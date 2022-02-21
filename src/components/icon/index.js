@@ -2,13 +2,16 @@ import iconStyle from 'inline!./src/components/icon/index.css';
 import { iconPathList } from './path.js';
 
 const sheetObj = new CSSStyleSheet();
-sheetObj.replace(iconStyle).then(console.log);
+sheetObj.replace(iconStyle).then();
 
 export default class Icon extends HTMLElement {
   static get observedAttributes() { return ['name','size','color','path'] }
 
   constructor() {
     super();
+  }
+
+  connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.adoptedStyleSheets = [sheetObj];
     shadowRoot.innerHTML = `
@@ -16,9 +19,6 @@ export default class Icon extends HTMLElement {
         ${this.path ? '<path id="path"></path>' : '<path id="use"></path>'}
       </svg>
     `;
-  }
-
-  connectedCallback() {
     this.icon = this.shadowRoot.getElementById('icon');
     this.use = this.icon.querySelector('use');
     this.d = this.icon.querySelector('path');
@@ -30,9 +30,15 @@ export default class Icon extends HTMLElement {
 
   attributeChangedCallback (name, oldValue, newValue) {
     if( name == 'name' && this.d){
-      // this.use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `./icon.svg#icon-${newValue}`);
+      // this.use.setAttributeNS('http://www.w3.org/2000/xlink', 'href', `./icon.svg#icon-${newValue}`);
       const pathDValue = iconPathList.find(item => item.name === newValue);
-      if (pathDValue) this.d.setAttribute("d", pathDValue.pathD);
+      if (pathDValue && pathDValue.pathDList && pathDValue.pathDList.length) {
+        let nodeContent = '';
+        pathDValue.pathDList.forEach(item => {
+          nodeContent += `<path d="${item}"></path>`;
+        })
+        this.shadowRoot.firstElementChild.innerHTML = nodeContent;
+      }
     }
     if( name == 'path' && this.d){
       this.d.setAttribute("d", newValue);

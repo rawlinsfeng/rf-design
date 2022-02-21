@@ -17,38 +17,6 @@ export default class Switch extends HTMLElement {
     `
   }
 
-  get disabled() {
-    return this.getAttribute('disabled') !== null;
-  }
-
-  get checked() {
-    return this.getAttribute('checked') !== null;
-  }
-
-  get name() {
-    return this.getAttribute('name');
-  }
-
-  set disabled(value) {
-    if (value===null || value===false) {
-      this.removeAttribute('disabled');
-    } else {
-      this.setAttribute('disabled', '');
-    }
-  }
-
-  set checked(value) {
-    if (value===null || value===false) {
-      this.removeAttribute('checked');
-    } else {
-      this.setAttribute('checked', '');
-    }
-  }
-
-  focus() {
-    this.switch.focus();
-  }
-  
   connectedCallback() {
     this.switch = this.shadowRoot.getElementById('switch');
     this.disabled = this.disabled;
@@ -109,6 +77,38 @@ export default class Switch extends HTMLElement {
       } else {
         this.switch.checked = false;
       }
+    }
+  }
+
+  focus() {
+    this.switch.focus();
+  }
+
+  get disabled() {
+    return this.getAttribute('disabled') !== null;
+  }
+
+  get checked() {
+    return this.getAttribute('checked') !== null;
+  }
+
+  get name() {
+    return this.getAttribute('name');
+  }
+
+  set disabled(value) {
+    if (value===null || value===false) {
+      this.removeAttribute('disabled');
+    } else {
+      this.setAttribute('disabled', '');
+    }
+  }
+
+  set checked(value) {
+    if (value===null || value===false) {
+      this.removeAttribute('checked');
+    } else {
+      this.setAttribute('checked', '');
     }
   }
 }
