@@ -1,0 +1,16 @@
+:host{
+  display: block;
+}
+:host([hidden]){
+  display: none;
+}
+.option {
+  display: flex;
+  justify-content: flex-start;
+  border-radius:0;
+  font-size: inherit;
+  padding-left:var(--paddingLeft,.625em);
+}
+:host([selected]) .option{
+  color:var(--themeColor,#42b983)
+}

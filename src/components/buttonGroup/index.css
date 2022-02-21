@@ -1,0 +1,23 @@
+:host {
+  display:inline-flex;
+}
+::slotted(rf-button:not(:first-of-type):not(:last-of-type)){
+  border-radius:0;
+}
+::slotted(rf-button){
+  margin:0!important;
+}
+::slotted(rf-button:not(:first-of-type)){
+  margin-left:-1px!important;
+}
+::slotted(rf-button[type]:not([type="dashed"]):not(:first-of-type)){
+  margin-left:1px!important;
+}
+::slotted(rf-button:first-of-type){
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0px;
+}
+::slotted(rf-button:last-of-type){
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
