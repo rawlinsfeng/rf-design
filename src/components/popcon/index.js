@@ -8,7 +8,7 @@ export default class Popcon extends HTMLElement {
 
   constructor(type) {
     super();
-    this.type = type;
+    if (type) this.type = type;
   }
 
   connectedCallback() {

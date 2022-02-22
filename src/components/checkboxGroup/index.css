@@ -1,0 +1,25 @@
+:host {
+  display:inline-block;
+}
+:host(:focus-within) rf-tips,:host(:hover) rf-tips{
+  z-index:2;
+}
+:host([disabled]){ 
+  pointer-events: none; 
+}
+:host([disabled]) rf-tips{
+  pointer-events: all;
+  cursor: not-allowed;
+  outline: 0;
+}
+:host([disabled]) ::slotted(rf-checkbox){
+  pointer-events: none;
+  opacity:.6;
+}
+::slotted(rf-checkbox){
+  transition: opacity .3s;
+}
+rf-tips[show=show]{
+  --themeColor:var(--errorColor,#f4615c);
+  --borderColor:var(--errorColor,#f4615c);
+}

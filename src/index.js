@@ -2,6 +2,8 @@ import 'https://unpkg.com/construct-style-sheets-polyfill';
 
 export * from './components/button/index.js';
 export * from './components/buttonGroup/index.js';
+export * from './components/checkbox/index.js';
+export * from './components/checkboxGroup/index.js';
 export * from './components/form/index.js';
 export * from './components/formItem/index.js';
 export * from './components/icon/index.js';

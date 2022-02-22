@@ -4,7 +4,6 @@ const sheetObj = new CSSStyleSheet();
 sheetObj.replace(messageStyle).then();
 
 class Message extends HTMLElement {
-
   static get observedAttributes() { return ['type','icon'] }
 
   constructor() {
@@ -102,9 +101,9 @@ class Message extends HTMLElement {
   }
 }
 
-if(!customElements.get('rf-message')){
-  customElements.define('rf-message', Message);
-}
+// if(!customElements.get('rf-message')){
+//   customElements.define('rf-message', Message);
+// }
 
 let messageContent = document.getElementById('message-content');
 if (!messageContent) {
