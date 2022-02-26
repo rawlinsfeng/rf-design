@@ -4,7 +4,7 @@ const sheetObj = new CSSStyleSheet();
 sheetObj.replace(selectStyle).then();
 
 export default class Select extends HTMLElement {
-  static get observedAttributes() { return ['value', 'disabled', 'type'] }
+  static get observedAttributes() { return ['value', 'disabled', 'type', 'multiple'] }
 
   constructor() {
     super();
@@ -86,7 +86,25 @@ export default class Select extends HTMLElement {
       const item = ev.target.closest('rf-option');
       if (item) {
         this.nativeclick = true;
-        this.value = item.value;
+        if (this.multiple) {
+          if (this.value.includes(item.value)) {
+            let ind = this.value.indexOf(item.value);
+            if (ind == 0) {
+              let commaInd = this.value.indexOf(',');
+              if (commaInd == this.value.length-1) {
+                this.value = '';
+              } else {
+                this.value = this.value.slice(commaInd+1);
+              }
+            } else {
+              this.value = this.value.slice(0,ind);
+            }
+          } else {
+            this.value += item.value + ',';
+          }
+        } else {
+          this.value = item.value;
+        }
       }
     })
     this.options.addEventListener('close', (ev) => {
@@ -278,6 +296,11 @@ export default class Select extends HTMLElement {
           current.focusin = false;
         }
       }
+      let selectedArray = [...this.querySelectorAll('rf-option[selected]')];
+      selectedArray.forEach(item => {
+        item.selected = false;
+        item.focusin = false;
+      });
       if (this.search) {
         this.select.placeholder = this.placeholder;
         this.select.value = '';
@@ -286,36 +309,66 @@ export default class Select extends HTMLElement {
       }
       return
     }
-    if (value !== this.value) {
+    if (this.multiple) {
       this.$value = value;
-      const pre = this.querySelector(`rf-option[selected]`);
-      if (pre) {
-        pre.selected = false;
-        pre.focusin = false;
-      }
-      const cur = this.querySelector(`rf-option[value="${value}"]`) || this.querySelector(`rf-option`);
-      this.focusIndex = this.nodes.indexOf(cur);
-      cur.selected = true;
-      cur.focusin = true;
-      this.$text = cur.textContent;
+      let valueArray = this.value.split(',');
+      valueArray.forEach(item => {
+        let valueOption = this.querySelector(`rf-option[value="${item}"]`);
+        if (valueOption) {
+          valueOption.selected = true;
+          valueOption.focusin = true;
+        }
+      });
+      let selectedArray = [...this.querySelectorAll('rf-option[selected]')];
+      let showContent = '';
+      selectedArray.forEach(item => {
+        if (!this.value.includes(item.value)) {
+          item.selected = false;
+          item.focusin = false;
+        } else {
+          showContent += item.textContent;
+        }
+      });
+      this.$text = showContent;
+      if (this.value == ',') this.$text = this.placeholder;
       if (this.search) {
         this.select.placeholder = this.$text;
         this.select.value = this.$text;
       } else {
         this.txt.textContent = this.$text;
       }
-      if (this.nativeclick) {
-        this.nativeclick = false;
-        this.checkValidity();
-        this.dispatchEvent(new CustomEvent('change', {
-          detail: {
-            value: value,
-            text: this.$text
-          }
-        }));
+    } else {
+      if (value !== this.value) {
+        this.$value = value;
+        const pre = this.querySelector(`rf-option[selected]`);
+        if (pre) {
+          pre.selected = false;
+          pre.focusin = false;
+        }
+        const cur = this.querySelector(`rf-option[value="${value}"]`) || this.querySelector(`rf-option`);
+        this.focusIndex = this.nodes.indexOf(cur);
+        cur.selected = true;
+        cur.focusin = true;
+        this.$text = cur.textContent;
+        if (this.search) {
+          this.select.placeholder = this.$text;
+          this.select.value = this.$text;
+        } else {
+          this.txt.textContent = this.$text;
+        }
+        if (this.nativeclick) {
+          this.nativeclick = false;
+          this.checkValidity();
+          this.dispatchEvent(new CustomEvent('change', {
+            detail: {
+              value: value,
+              text: this.$text
+            }
+          }));
+        }
       }
+      this.options.open = false;
     }
-    this.options.open = false;
   }
 
   get text() {
@@ -399,6 +452,10 @@ export default class Select extends HTMLElement {
 
   get placeholder() {
     return this.getAttribute('placeholder') || '请选择';
+  }
+
+  get multiple() {
+    return this.getAttribute('multiple') !== null;
   }
 }
 
