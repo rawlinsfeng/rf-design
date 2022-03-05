@@ -1,4 +1,4 @@
-import 'https://unpkg.com/construct-style-sheets-polyfill';
+import 'construct-style-sheets-polyfill';
 
 export * from './components/button/index.js';
 export * from './components/buttonGroup/index.js';
